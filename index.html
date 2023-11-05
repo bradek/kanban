@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban board</title>
+    <!--Stylesheet to css/style.css-->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="header-container">
+        <h1>Kanban Board</h1>
+    </div>
+    <!--A login and register link with classes to style.-->
+    <div class="login-register">
+        <a href="accountregister.html">Accounts</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+    </div>
+    <p id="point-counter">Points: 0</p>
+
+    <!--Make a div with class 'add-task'.
+    In the div I want a text input with id 'taskInput' and a button with onClick 'addTask()'-->
+    <div class="add-task">
+        <input type="text" id="taskInput" placeholder="Add new task">
+        <button onclick="addTask()">Add task</button><br>
+        <!--A button with onclick 'removeTask()'-->
+        <button onclick="removeTask()">Remove task</button>
+        <!--A button with onclick 'toggleMode()'-->
+        <button onclick="toggleMode()">Toggle mode</button>
+        <!--A button with onclick 'businessTests()'-->
+        <button onclick="businessTests()">Business tests</button>
+    </div>
+
+    <!--A div with the class 'Kanban board'-->
+    <div class="kanban-board">
+        
+
+            <!--Three div's with a class 'column.'
+            The first with id 'todo', the second 'inprogress' and the third 'done'.-->
+            <div class="column" id="todo">
+                <h2>To do</h2>
+                    <!--Three times a div with the class 'tasks', ondrop 'drop(event)', ondragover 'allowDrop(event)'.
+                    The first time with the id 'todo-tasks', second 'inprogess-tasks', third one 'done-tasks'.-->
+                    <div class="tasks" id="todo-tasks" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+    
+            <div class="column" id="inprogress">
+                <h2>In progress</h2>
+                <!--Here you put the second tasks div.-->
+                <div class="tasks" id="inprogress-tasks" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+            
+            <div class="column" id="done">
+                <h2>Done</h2>
+                <!--Here you put the third tasks div.-->
+                    <div class="tasks" id="done-tasks" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+
+    </div>
+
+
+    
+    <!--Script link to js/kanban.js-->
+    <script src="js/kanban.js"></script>
+    <!--Script link to js/tests.js-->
+    <script src="js/tests.js"></script>
+</body>
+</html>

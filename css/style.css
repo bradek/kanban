@@ -1,0 +1,248 @@
+:root {
+    --background-light: #f5f5f5;
+    --text-light: #333;
+    --column-bg-light: #fff;
+    --column-border-light: 1px solid #ccc;
+    --task-bg-light: #f9f9f9;
+    --task-border-light: 1px solid #ddd;
+    --button-bg-light: #3498db;
+    --button-hover-bg-light: #2980b9;
+
+    --background-dark: #222;
+    --task-bg-dark: #333; /* Lighter task background color */
+    --task-border-dark: 1px solid #444; /* Adjusted task border color */
+    --button-bg-dark: #597db9; /* A lighter button background color */
+    --button-hover-bg-dark: #4a6d9d; /* Darker hover color */
+
+    /* Adding a slightly lighter shade for task background in dark mode */
+    --task-bg-lighter-dark: #3a3a3a; 
+
+    --h1-text-color: white; /* A lighter shade of blue for h1 in dark mode */
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-light);
+    margin: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.kanban-board {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.column {
+    flex: 1;
+    margin: 10px;
+    padding: 20px;
+    background-color: var(--column-bg-light); /* Set the default column background color */
+    border: var(--column-border-light);
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, border 0.3s;
+}
+
+.column h2 {
+    margin: 0 0 10px;
+    font-size: 1.2em;
+    color: var(--text-light);
+    transition: color 0.3s;
+}
+
+.tasks {
+    min-height: 100px;
+    border-radius: 5px;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: var(--task-bg-light);
+    border: var(--task-border-light);
+    transition: background-color 0.3s, border 0.3s;
+}
+
+.add-task {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.add-task input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.add-task button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--button-bg-light);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-task button:hover {
+    background-color: var(--button-hover-bg-light);
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: var(--background-dark);
+    color: var(--text-dark);
+}
+
+body.dark-mode .kanban-board {
+    filter: invert(1);
+}
+
+body.dark-mode .column {
+    border: var(--column-border-dark);
+}
+
+body.dark-mode .column h2 {
+    color: var(--text-dark);
+}
+
+body.dark-mode .tasks {
+    background-color: var(--task-bg-dark);
+    border: var(--task-border-dark);
+}
+
+body.dark-mode .add-task button {
+    background-color: var(--button-bg-dark);
+}
+
+body.dark-mode .add-task button:hover {
+    background-color: var(--button-hover-bg-dark);
+}
+
+h1 {
+    color: var(--text-light);
+    transition: color 0.3s;
+}
+
+body.dark-mode h1 {
+    color: var(--h1-text-color) !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Adding a subtle text shadow for h1 in dark mode */
+    transition: color 0.3s, text-shadow 0.3s; /* Adding transition for text-shadow in dark mode */
+}
+
+button{
+    margin: 10px;
+    padding: 8px 15px;
+    font-weight: bold;
+}
+
+/* Adjusted task class with a slightly lighter background for improved contrast */
+.task {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin: 5px 0;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.task:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.task:after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    border-radius: 10px;
+    border: 1px dashed #ccc;
+    z-index: -2;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+/* Adjusted hover styles for improved readability */
+.task:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: var(--task-bg-lighter-dark); /* Changed background color on hover */
+}
+
+.task:hover:before {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.task:hover:after {
+    opacity: 1;
+}
+
+#point-counter {
+    margin: 10px;
+    padding: 8px 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: var(--button-bg-light);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+body.dark-mode #point-counter {
+    background-color: var(--button-bg-dark);
+}
+
+.header-container {
+    text-align: center; /* Center align the h1 */
+    padding: 15px 0; /* Padding to provide space around the h1 */
+    background-color: #f0f0f0; /* A light background color */
+    border-bottom: 2px solid #ddd; /* Add a subtle border at the bottom */
+
+    /* Optional box-shadow for a professional look */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .header-container {
+    background-color: #222;
+    border-bottom: 2px solid #444;
+}
+
+/*Add css for the login-register class. I want a bit of distance between the links.
+I want it to have a more appealing look, no underline and at the right side of the screen.
+I don't want the links to have a standard hyperlink colour, but a more pleasant colour.*/
+.login-register {
+    margin: 10px;
+    padding: 8px 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    background-color: var(--button-bg-light);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    float: right;
+}
+
+.login-register a{
+    text-decoration: none;
+    color: #fff;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+body.dark-mode .login-register {
+    background-color: var(--button-bg-dark);
+}

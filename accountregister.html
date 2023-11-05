@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ...Meta tags, title, etc. -->
+</head>
+<body>
+    <a href="index.html">Go back.</a>
+    <h1>User Data Display</h1>
+    <ul id="userData">
+        <!-- User data will be displayed here -->
+    </ul>
+
+    <script>
+        window.onload = function() {
+            const users = getUsers();
+            const userDataList = document.getElementById('userData');
+            users.forEach(user => {
+                const userItem = document.createElement('li');
+                userItem.textContent = `Username: ${user.username}Password: ${user.password}, Role: ${user.role}`;
+                userDataList.appendChild(userItem);
+
+                // Add an option to change user role to Admin or User
+                const roleChanger = document.createElement('button');
+                roleChanger.textContent = `Change Role to ${user.role === 'Admin' ? 'User' : 'Admin'}`;
+                roleChanger.onclick = function() {
+                    user.role = user.role === 'Admin' ? 'User' : 'Admin';
+                    localStorage.setItem('users', JSON.stringify(users));
+                    window.location.reload(); // Refresh to reflect changes
+                };
+                userDataList.appendChild(roleChanger);
+            });
+        };
+
+        function getUsers() {
+            const userData = JSON.parse(localStorage.getItem('users'));
+            return userData;
+        }
+    </script>
+</body>
+</html>
