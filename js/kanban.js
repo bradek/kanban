@@ -5,10 +5,22 @@ let totalPoints = 0;
 
 /*An allowDrop method with 'event'.
 This method is made to allow dropping the tasks in another section.
-the needed updates for the points will be done here as well by calling the right methods to do so.*/
+the needed updates for the points will be done here as well by calling the right methods to do so.
+Add the updatePointsToDoInProgress function call in the allowDrop method*/
 function allowDrop(event) {
     event.preventDefault();
-    
+
+    // Voeg een check toe voor 'In Progress' en bel updatePointsToDoInProgress
+    if (event.target.id === 'inprogress-tasks') {
+        updatePointsToDoInProgress(event);
+    }
+
+    // Assuming the updatePointsToDoInProgress function is used on the 'dragleave' event.
+    // Add an event listener for the 'dragleave' event for the targets to ensure smooth updating of points.
+    event.target.addEventListener('dragleave', function (event) {
+        updatePointsToDoInProgress(event);
+    });
+
     const doneTasks = document.getElementById('done-tasks').childNodes;
 
     if (event.target.className === 'tasks') {
@@ -17,6 +29,12 @@ function allowDrop(event) {
         } 
         else if (doneTasks.includes(draggableTask) && event.target.id === 'done-tasks') {
             updatePoints(); // Update points if task was dragged back to 'done'
+        }
+        else {
+            // Update points for 'To do' to 'In progress' section changes
+            if (event.target.id === 'inprogress-tasks') {
+                updatePointsToDoInProgress(event);
+            }
         }
 
         event.target.appendChild(draggableTask);
@@ -40,19 +58,31 @@ function drop(event) {
 
     // Code to handle the task drop
     if (event.target.className === 'tasks') {
+        const originalParentId = originalParent.id;
+        const targetId = event.target.id;
+
         event.target.appendChild(draggableTask);
 
-        //If the event target id is 'done-tasks', then the updatePoints() method is being called.
-        if (event.target.id === 'done-tasks') {
-            updatePoints();
+        //If the event target id is 'todo-tasks', then the addPointsToDoInProgress() method is being called.
+        if (originalParent.id === 'todo-tasks' && event.target.id === 'inprogress-tasks') {
+            addPointsToDoInProgress();
+        } 
+        //If the event target id is 'inprogress-tasks', then the substractPointsToDoInProgress() method is being called.
+        else if (originalParentId === 'inprogress-tasks' && targetId === 'done-tasks') {
+            console.log('Task moved from in-progress to done');
+            addPoints();
+        }
+        //If the event target id is 'inprogress-tasks', then the updatePointsToDoInProgress() method is being called.
+        else if (originalParent.id === 'done-tasks' && event.target.id !== 'done-tasks') {
+            substractPoints();
+        } 
+        
+        // Check if the task is moved from 'in-progress' to 'done'
+        else if (originalParentId === 'inprogress-tasks' && targetId === 'done-tasks') {
+            addPoints();
         }
 
         saveTasks();
-
-        if (originalParent.id === 'done-tasks' && originalParent !== event.target) {
-            substractPoints(); // Subtract points if the task is dropped in another section from 'done'
-        }
-
         originalParent = null; // Reset original parent after drop
     }
 }
@@ -69,6 +99,7 @@ function drop(event) {
             document.getElementById('todo-tasks').appendChild(task);
             //The saveTasks() method is being called.
             saveTasks();
+            addNewTaskPoints(); // Add points for adding a new task
             document.getElementById('taskInput').value = '';
         } else {
             alert('Fill in a task!!');
@@ -79,13 +110,30 @@ function drop(event) {
     function removeTask() {
         if (draggableTask) {
             const doneTasks = document.getElementById('done-tasks').childNodes;
+            const inProgressTasks = document.getElementById('inprogress-tasks').childNodes;
+            const todoTasks = document.getElementById('todo-tasks').childNodes;
 
-            //If the event target is not anymore in 'done-tasks', 10 points get removed.
+            //If the event target is not anymore in 'done-tasks', 15 points get removed.
             if (doneTasks && doneTasks.length > 0 && doneTasks[doneTasks.length - 1] === draggableTask) {
                 substractPoints(); // Subtract points if the removed task was from the 'done' section
             }
 
-            draggableTask.remove();
+            //If the event target is not anymore in 'inprogress-tasks', 5 points get removed.
+            if (inProgressTasks && inProgressTasks.length > 0 && inProgressTasks[inProgressTasks.length - 1] === draggableTask) {
+                substractPointsToDoInProgress(); // Subtract points if the removed task was from 'In progress'
+            }
+
+            //If the event target is not anymore in 'todo-tasks', 1 point gets removed.
+            if (todoTasks && todoTasks.length > 0 && todoTasks[todoTasks.length - 1] === draggableTask) {
+                substractPointsTodo(); // Subtract points if the removed task was from 'To do'
+            }
+
+
+            /*I want a pop up asking 'Are you sure you want to remove this task?'
+            If you click on 'Yes', the task will be removed.*/
+            if (confirm('Are you sure you want to remove this task?')) {
+                draggableTask.remove();
+            }
 
             //The saveTasks() method is being called.
             saveTasks();
@@ -183,21 +231,76 @@ function drop(event) {
     //Make a function 'updatePoints' which updates the points.
     function updatePoints() {
         const doneTasks = document.getElementById('done-tasks').childNodes;
-        totalPoints = 10 * doneTasks.length;
+        totalPoints = 15 * doneTasks.length;
         savePoints(); // Save the updated points
         document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
     }
     
     //Make a function 'addPoints' which adds points.
     function addPoints() {
-        totalPoints += 10;
+        totalPoints += 15;
         savePoints(); // Save the updated points
         document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
     }
     
     //Make a function 'substractPoints' which substracts points.
     function substractPoints() {
-        totalPoints -= 10;
+        // Ensure the points don't go below 0
+        if (totalPoints > 0) {
+            totalPoints -= 15;
+        }
+        else{
+            totalPoints = 0;
+        }
+        savePoints(); // Save the updated points
+        document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
+    }
+
+    /* Add a method 'updatePointsToDoInProgress()'to update points when tasks move between 'To do' and 'In progress'*/
+    function updatePointsToDoInProgress(event) {
+        const todoTasks = document.getElementById('todo-tasks').childNodes;
+        const inProgressSection = document.getElementById('inprogress-tasks');
+        const inProgressTasks = inProgressSection.childNodes;
+    
+        // Check if the dragged task is from 'To do' and is moving into 'In Progress'
+        if (todoTasks.includes(draggableTask) && event.target === inProgressSection) {
+            addPointsToDoInProgress(); // Add points when a task moves from 'To do' to 'In Progress'
+        } 
+        else if (inProgressTasks.includes(draggableTask) && event.target.id === 'todo-tasks') {
+            substractPointsToDoInProgress(); // Subtract points if the task moves back from 'In Progress' to 'To do'
+        }
+    }
+
+    /*Add a method 'addPointsToDoInProgress' to add 5 points.*/
+    function addPointsToDoInProgress() {
+        totalPoints += 5; // Update to add 5 points when a task moves from 'To do' to 'In progress'
+        savePoints();
+        document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
+    }
+
+    /*Add a method 'substractPointsToDoInProgress()' to remove 5 points. 
+    If the user already has less than 5 points, their points are getting to 0.*/
+    function substractPointsToDoInProgress() {
+        if (totalPoints >= 5) {
+            totalPoints -= 5;
+        } 
+        else {
+            totalPoints = 0;
+        }
+        
+        savePoints();
+        document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
+    }
+
+    /*Add a method 'substractPointsToDo* to remove 1 point.
+    If the user already has 0 points, their points stay 0.*/
+    function substractPointsTodo() {
+        if (totalPoints > 0) {
+            totalPoints -= 1;
+        }
+        else{
+            totalPoints = 0;
+        }
         savePoints(); // Save the updated points
         document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
     }
@@ -205,6 +308,13 @@ function drop(event) {
     /*The savePoints() method will save 'saved points' in localStorage.*/
     function savePoints() {
         localStorage.setItem('points', totalPoints);
+    }
+
+    /*The addNewTaskPoints() method will add 1 point when a new task is added.*/
+    function addNewTaskPoints() {
+        totalPoints += 1;
+        savePoints(); // Save the updated points
+        document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
     }
     
     //The restorePoints() method will restore the points from localStorage.
@@ -214,4 +324,11 @@ function drop(event) {
             totalPoints = parseInt(points);
             document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
         }
+    }
+
+    //A simple resetPoints() method which resets the points to 0.
+    function resetPoints() {
+        totalPoints = 0;
+        savePoints(); // Save the updated points
+        document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
     }
