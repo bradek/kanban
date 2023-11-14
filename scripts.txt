@@ -1,0 +1,74 @@
+for the following things create database tables using mysql script:
+ Userdb: Id, Username, Name, Email, Password, Team
+ Task: Id, Name, Description, Status, Kanban, Team, User
+ Team: Id, Name, Kanban, Users
+ Kanban: Id, Name, Team, Tasks
+
+
+///////////////////////////////////
+
+First Create Database
+
+///////////////////////////////
+
+CREATE TABLE Userdb (
+    Id INT NOT NULL AUTO_INCREMENT,
+    Username VARCHAR(50) NOT NULL,
+    Name VARCHAR(50) NOT NULL,
+    Email VARCHAR(50) NOT NULL,
+    Password VARCHAR(50) NOT NULL,
+    TeamId INT NOT NULL,
+    PRIMARY KEY (Id)
+);
+
+CREATE TABLE Task (
+    Id INT NOT NULL AUTO_INCREMENT,
+    Name VARCHAR(50) NOT NULL,
+    Description VARCHAR(255) NOT NULL,
+    Status VARCHAR(50) NOT NULL,
+    KanbanId INT NOT NULL,
+    TeamId INT NOT NULL,
+    UserIdCreated INT NOT NULL,
+    UserIdChanged INT NOT NULL,
+    PRIMARY KEY (Id)
+);
+
+CREATE TABLE Team (
+    Id INT NOT NULL AUTO_INCREMENT,
+    Name VARCHAR(50) NOT NULL,
+    KanbanId INT NOT NULL,
+    PRIMARY KEY (Id)
+);
+
+CREATE TABLE Kanban (
+    Id INT NOT NULL AUTO_INCREMENT,
+    Name VARCHAR(50) NOT NULL,
+    TeamId INT NOT NULL,
+    PRIMARY KEY (Id)
+);
+ 
+ 
+//////////////////////////////////////
+
+
+ALTER TABLE Userdb
+ADD FOREIGN KEY (TeamId) REFERENCES Team(Id);
+
+ALTER TABLE Task
+ADD FOREIGN KEY (TeamId) REFERENCES Team(Id);
+
+ALTER TABLE Task
+ADD FOREIGN KEY (KanbanId) REFERENCES Kanban(Id);
+
+ALTER TABLE Task
+ADD FOREIGN KEY (UserIdCreated) REFERENCES Userdb(Id);
+
+ALTER TABLE Task
+ADD FOREIGN KEY (UserIdChanged) REFERENCES Userdb(Id);
+
+ALTER TABLE Team
+ADD FOREIGN KEY (KanbanId) REFERENCES Kanban(Id);
+
+ALTER TABLE Kanban
+ADD FOREIGN KEY (TeamId) REFERENCES Team(Id);
+
