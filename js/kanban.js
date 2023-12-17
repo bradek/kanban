@@ -11,7 +11,7 @@ function allowDrop(event) {
     event.preventDefault();
 
     // Voeg een check toe voor 'In Progress' en bel updatePointsToDoInProgress
-    if (event.target.id === 'inprogress-tasks') {
+  /*  if (event.target.id === 'inprogress-tasks') {
         updatePointsToDoInProgress(event);
     }
 
@@ -20,10 +20,10 @@ function allowDrop(event) {
     event.target.addEventListener('dragleave', function (event) {
         updatePointsToDoInProgress(event);
     });
-
+*/
     const doneTasks = document.getElementById('done-tasks').childNodes;
 
-    if (event.target.className === 'tasks') {
+  /*  if (event.target.className === 'tasks') {
         if (!doneTasks.includes(draggableTask) && event.target.id !== 'done-tasks') {
             substractPoints(); // Subtract points if task dragged from 'done' to another section
         } 
@@ -39,7 +39,7 @@ function allowDrop(event) {
 
         event.target.appendChild(draggableTask);
         saveTasks();
-    }
+    } */
 }
 
 //A drag method in which draggableTask is equal to event.target.
@@ -64,25 +64,30 @@ function drop(event) {
         event.target.appendChild(draggableTask);
 
         //If the event target id is 'todo-tasks', then the addPointsToDoInProgress() method is being called.
-        if (originalParent.id === 'todo-tasks' && event.target.id === 'inprogress-tasks') {
-            addPointsToDoInProgress();
+        if (originalParentId === 'todo-tasks' && targetId === 'inprogress-tasks') {
+            addPoints2(5);
         } 
-        //If the event target id is 'inprogress-tasks', then the substractPointsToDoInProgress() method is being called.
+        else if (originalParentId === 'todo-tasks' && targetId === 'done-tasks') {
+            addPoints2(20);
+        } 
+        
         else if (originalParentId === 'inprogress-tasks' && targetId === 'done-tasks') {
-            console.log('Task moved from in-progress to done');
-            addPoints();
+            addPoints2(15);
+        }
+        else if (originalParentId === 'inprogress-tasks' && targetId === 'todo-tasks') {
+            removePoints(5);
         }
         //If the event target id is 'inprogress-tasks', then the updatePointsToDoInProgress() method is being called.
-        else if (originalParent.id === 'done-tasks' && event.target.id !== 'done-tasks') {
-            substractPoints();
+        else if (originalParentId === 'done-tasks' && targetId === 'inprogress-tasks') {
+            removePoints(15);
         } 
         
         // Check if the task is moved from 'in-progress' to 'done'
-        else if (originalParentId === 'inprogress-tasks' && targetId === 'done-tasks') {
-            addPoints();
+        else if (originalParentId === 'done-tasks' && targetId === 'todo-tasks') {
+            removePoints(20);
         }
 
-        saveTasks();
+         saveTasks();
         originalParent = null; // Reset original parent after drop
     }
 }
@@ -113,25 +118,29 @@ function drop(event) {
             const inProgressTasks = document.getElementById('inprogress-tasks').childNodes;
             const todoTasks = document.getElementById('todo-tasks').childNodes;
 
-            //If the event target is not anymore in 'done-tasks', 15 points get removed.
-            if (doneTasks && doneTasks.length > 0 && doneTasks[doneTasks.length - 1] === draggableTask) {
-                substractPoints(); // Subtract points if the removed task was from the 'done' section
-            }
-
-            //If the event target is not anymore in 'inprogress-tasks', 5 points get removed.
-            if (inProgressTasks && inProgressTasks.length > 0 && inProgressTasks[inProgressTasks.length - 1] === draggableTask) {
-                substractPointsToDoInProgress(); // Subtract points if the removed task was from 'In progress'
-            }
-
-            //If the event target is not anymore in 'todo-tasks', 1 point gets removed.
-            if (todoTasks && todoTasks.length > 0 && todoTasks[todoTasks.length - 1] === draggableTask) {
-                substractPointsTodo(); // Subtract points if the removed task was from 'To do'
-            }
-
-
-            /*I want a pop up asking 'Are you sure you want to remove this task?'
+             /*I want a pop up asking 'Are you sure you want to remove this task?'
             If you click on 'Yes', the task will be removed.*/
             if (confirm('Are you sure you want to remove this task?')) {
+                
+            
+                //If the event target is not anymore in 'done-tasks', 15 points get removed.
+                if (doneTasks && doneTasks.length > 0 && doneTasks[doneTasks.length - 1] === draggableTask) {
+                    substractPoints(); // Subtract points if the removed task was from the 'done' section
+                    substractPointsToDoInProgress();
+                    substractPointsTodo();
+                }
+
+                //If the event target is not anymore in 'inprogress-tasks', 5 points get removed.
+                if (inProgressTasks && inProgressTasks.length > 0 && inProgressTasks[inProgressTasks.length - 1] === draggableTask) {
+                    substractPointsToDoInProgress(); // Subtract points if the removed task was from 'In progress'
+                    substractPointsTodo();
+                }
+
+                //If the event target is not anymore in 'todo-tasks', 1 point gets removed.
+                if (todoTasks && todoTasks.length > 0 && todoTasks[todoTasks.length - 1] === draggableTask) {
+                    substractPointsTodo(); // Subtract points if the removed task was from 'To do'
+                }
+
                 draggableTask.remove();
             }
 
@@ -193,7 +202,24 @@ function drop(event) {
     
     window.onload = function() {
         loadTasks();
+        // Create a dummy json to save to localstorage scores
+        check = JSON.parse(localStorage.getItem('scores')) || [];
+        if (check.length === 0) {
+            const dummyScores = [{ name: 'Bob', score: 0 },
+        { name: 'Alice', score: 5 },
+        { name: 'Tester', score: 0 },
+        { name: 'Bob', score: 20 },
+        { name: 'Tiger', score: 60 },
+        { name: 'Eve', score: 100 },
+        { name: 'Lars', score: 3 },
+        { name: 'Sam', score: 12 },
+        { nam: 'Steve', score: 8 }];
+        localStorage.setItem('scores', JSON.stringify(dummyScores));
+        }
+        
+        console.log(JSON.parse(localStorage.getItem('scores')));
     }
+    
 
     /*The selectTask method and the addEventListener 'click' have been generated by ChatGPT 3.5*/
     /*The selectTask method should make sure the user can select a task.
@@ -316,7 +342,7 @@ function drop(event) {
         savePoints(); // Save the updated points
         document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
     }
-    
+        
     //The restorePoints() method will restore the points from localStorage.
     function restorePoints() {
         const points = localStorage.getItem('points');
@@ -332,3 +358,65 @@ function drop(event) {
         savePoints(); // Save the updated points
         document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
     }
+    //A simple function that adds points to totalPoints and updates point counter in html
+    function addPoints2(points) {
+        totalPoints += points;
+        savePoints(); // Save the updated points
+        document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
+        UpdateScore();
+    }
+    //A simple function that removes points from totalPoints and updates point counter in html
+    function removePoints(points) {
+        totalPoints -= points;
+        savePoints(); // Save the updated points
+        document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
+        UpdateScore();
+    }
+
+
+    // A function that creates a JSON file with a name and score that will be saved in localstorage
+    function UpdateScore() {
+        const testerName = "Tester";
+        const score = totalPoints;
+        const scoreObject = { testerName, score };
+        const scoreslist = JSON.parse(localStorage.getItem('scores')) || [];
+
+       
+        
+        
+        
+
+        for (var i = 0; i < scoreslist.length; i++) {
+            if (scoreslist[i].name === testerName) {
+              scoreslist[i].score = totalPoints;
+              console.log ("Score updated");
+              break;
+            }
+            console.log ("looped");
+          }
+        localStorage.setItem('scores', JSON.stringify(scoreslist));
+    }
+
+    // A function that loads the scores from localstorage and displays them in the scoreboard
+    function loadScores() {
+        const scores = JSON.parse(localStorage.getItem('scores'));
+        console.log(scores);
+        if (scores) {
+            let counter = 1;
+            const scoreList = document.getElementById('score-list');
+            scoreList.innerHTML = '';
+            scores.forEach(score => {
+                const scoreItem = document.createElement('li');
+                scoreItem.textContent = `${counter}:    ${score.testerName}: ${score.score}`;
+                scoreList.appendChild(scoreItem);
+                counter++;
+            });
+        }
+    }
+
+    // function to clear scores from localstorage
+    function clearScores() {
+        localStorage.removeItem('scores');
+    }
+
+    
