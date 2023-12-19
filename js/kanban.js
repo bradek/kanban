@@ -360,6 +360,7 @@ function drop(event) {
         totalPoints = 0;
         savePoints(); // Save the updated points
         document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
+        UpdateScore();
     }
     //A simple function that adds points to totalPoints and updates point counter in html
     function addPoints2(points) {
