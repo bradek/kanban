@@ -125,20 +125,23 @@ function drop(event) {
             
                 //If the event target is not anymore in 'done-tasks', 15 points get removed.
                 if (doneTasks && doneTasks.length > 0 && doneTasks[doneTasks.length - 1] === draggableTask) {
-                    substractPoints(); // Subtract points if the removed task was from the 'done' section
-                    substractPointsToDoInProgress();
-                    substractPointsTodo();
+                    //substractPoints(); // Subtract points if the removed task was from the 'done' section
+                    //substractPointsToDoInProgress();
+                   // substractPointsTodo();
+                    removePoints(21);
                 }
 
                 //If the event target is not anymore in 'inprogress-tasks', 5 points get removed.
                 if (inProgressTasks && inProgressTasks.length > 0 && inProgressTasks[inProgressTasks.length - 1] === draggableTask) {
-                    substractPointsToDoInProgress(); // Subtract points if the removed task was from 'In progress'
-                    substractPointsTodo();
+                    //substractPointsToDoInProgress(); // Subtract points if the removed task was from 'In progress'
+                    //substractPointsTodo();
+                    removePoints(6);
                 }
 
                 //If the event target is not anymore in 'todo-tasks', 1 point gets removed.
                 if (todoTasks && todoTasks.length > 0 && todoTasks[todoTasks.length - 1] === draggableTask) {
-                    substractPointsTodo(); // Subtract points if the removed task was from 'To do'
+                    //substractPointsTodo(); // Subtract points if the removed task was from 'To do'
+                    removePoints(1);
                 }
 
                 draggableTask.remove();
@@ -213,7 +216,7 @@ function drop(event) {
         { name: 'Eve', score: 100 },
         { name: 'Lars', score: 3 },
         { name: 'Sam', score: 12 },
-        { nam: 'Steve', score: 8 }];
+        { name: 'Steve', score: 8 }];
         localStorage.setItem('scores', JSON.stringify(dummyScores));
         }
         
@@ -368,6 +371,9 @@ function drop(event) {
     //A simple function that removes points from totalPoints and updates point counter in html
     function removePoints(points) {
         totalPoints -= points;
+        if (totalPoints<0){
+            totalPoints=0;
+        }
         savePoints(); // Save the updated points
         document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
         UpdateScore();

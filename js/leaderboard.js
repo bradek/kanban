@@ -2,6 +2,11 @@
 function loadScores() {
     const scores = JSON.parse(localStorage.getItem('scores'));
     console.log(scores);
+    scores.sort(function(a,b){
+        return b.score - a.score;
+    })
+    console.log(scores)
+            
     if (scores) {
         let counter = 1;
         const scoreList = document.getElementById('score-list');
