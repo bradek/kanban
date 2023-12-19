@@ -3,15 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Leaderboard</title>
+    <link rel="stylesheet" href="css/leaderboard.css">
 </head>
 <body onload="loadScores()">
 
-    <h1>Leaderboard</h1>
-    <li id="score-list">
+    <header>
+        <h1>Leaderboard</h1>
+    </header>
 
-    </li>
-    
+    <nav>
+        <a href="index.html" class="back-link">Back to Index</a>
+    </nav>
+
+    <!-- Replace the unordered list with a div -->
+    <div id="score-list" class="leaderboard-table">
+
+    </div>
 
     <script src="js/leaderboard.js"></script>
 </body>

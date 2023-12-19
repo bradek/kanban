@@ -1,0 +1,87 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #3498db;
+    color: #fff;
+    text-align: center;
+    padding: 1px 0;
+}
+
+nav {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+table.leaderboard-table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table.leaderboard-table th,
+table.leaderboard-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+table.leaderboard-table th {
+    background-color: #3498db;
+    color: #fff;
+}
+
+table.leaderboard-table tr:nth-child(even) {
+    background-color: #ecf0f1;
+}
+
+/* Artistic style for the table */
+table.leaderboard-table th,
+table.leaderboard-table td {
+    border-radius: 0; /* Reset border-radius */
+}
+
+table.leaderboard-table th {
+    text-transform: uppercase;
+    background-color: #2980b9; /* Darker blue tint */
+}
+
+/* Make 'Ranking' td the least wide */
+table.leaderboard-table td:nth-child(1) {
+    width: 20%; /* Adjust the width as needed */
+}
+
+/* Make 'Name' td the widest */
+table.leaderboard-table td:nth-child(2) {
+    width: 60%; /* Adjust the width as needed */
+}
+
+/* Make 'Score' td average width */
+table.leaderboard-table td:nth-child(3) {
+    width: 20%; /* Adjust the width as needed */
+}
+
+/* Remove hover effect */
+table.leaderboard-table tr:hover {
+    background-color: inherit;
+    transition: none;
+}

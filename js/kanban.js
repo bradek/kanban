@@ -216,7 +216,8 @@ function drop(event) {
         { name: 'Eve', score: 100 },
         { name: 'Lars', score: 3 },
         { name: 'Sam', score: 12 },
-        { name: 'Steve', score: 8 }];
+        { name: 'Frank', score: 88 },
+        { name: 'Johnny', score: 8 }];
         localStorage.setItem('scores', JSON.stringify(dummyScores));
         }
         
