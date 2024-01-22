@@ -69,10 +69,16 @@ function drop(event) {
         } 
         else if (originalParentId === 'todo-tasks' && targetId === 'done-tasks') {
             addPoints2(20);
+            finishedCounter= JSON.parse(localStorage.getItem('finishedCounter'));
+            finishedCounter++;
+            localStorage.setItem('finishedCounter',finishedCounter);
         } 
         
         else if (originalParentId === 'inprogress-tasks' && targetId === 'done-tasks') {
             addPoints2(15);
+            finishedCounter= JSON.parse(localStorage.getItem('finishedCounter'));
+            finishedCounter++;
+            localStorage.setItem('finishedCounter',finishedCounter);
         }
         else if (originalParentId === 'inprogress-tasks' && targetId === 'todo-tasks') {
             removePoints(5);
@@ -109,6 +115,9 @@ function drop(event) {
         } else {
             alert('Fill in a task!!');
         }
+        createCounter=JSON.parse(localStorage.getItem('createCounter'));
+        createCounter++;
+        localStorage.setItem('createCounter',createCounter);
     }
 
     //A method to remove a task.
@@ -375,6 +384,7 @@ function drop(event) {
         savePoints(); // Save the updated points
         document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
         UpdateScore();
+        checkPoints(totalPoints);
     }
 // A function that removes points from totalPoints and updates point counter in html
 function removePoints(points) {
@@ -385,6 +395,7 @@ function removePoints(points) {
     savePoints(); // Save the updated points
     document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
     UpdateScore(); // Call the function after updating the points
+    checkPoints(totalPoints);
 }
 
 
@@ -405,11 +416,7 @@ function UpdateScore() {
     }
     localStorage.setItem('scores', JSON.stringify(scoreslist));
 
-    // Check if the user has reached 500 points after updating the score
-    if (totalPoints >= 500) {
-        createBadge();
-        displayPopup();
-    }
+
 }
 
     // A function that loads the scores from localstorage and displays them in the scoreboard
@@ -434,13 +441,14 @@ function UpdateScore() {
         const badgeImage = document.createElement('img');
         badgeImage.src = 'img/badge_500points.png'; // Update with your image path
         badgeImage.alt = '500 Points Badge';
-    
+        console.log("500 gehaald");
         // Append the badge to the badges section
-        const badgesSection = document.getElementById('badges-section');
-        badgesSection.appendChild(badgeImage);
+       // const badgesSection = document.getElementById('badges-section');
+       // badgesSection.appendChild(badgeImage);
     }
 
     function displayPopup() {
+        console.log("500 gehaald");
         // Create a popup element
         const popup = document.createElement('div');
         popup.className = 'popup';
@@ -453,12 +461,14 @@ function UpdateScore() {
         setTimeout(() => {
             popup.remove();
         }, 5000);
+        console.log("500 gehaald");
     }    
 
     // function to clear scores from localstorage
     function clearScores() {
         localStorage.removeItem('scores');
-    }    function createBadge() {
+    }    
+    function createBadge() {
         // Create badge image element
         const badgeImage = document.createElement('img');
         badgeImage.src = 'img/badge_500points.png'; // Update with your image path
@@ -486,6 +496,28 @@ function UpdateScore() {
 
     window.onload = function() {
         loadTasks();
+         badge500= JSON.parse(localStorage.getItem('badge500')) || false;
+         if (badge500 === false){
+            localStorage.setItem('badge500',false);
+         }
+         badgeFin20= JSON.parse(localStorage.getItem('badgeFin20')) || false;
+         if (badgeFin20 === false){
+            localStorage.setItem('badgeFin20',false);
+         }
+         badgeFree= JSON.parse(localStorage.getItem('badgeFree')) || false;
+         if (badgeFree === false){
+            localStorage.setItem('badgeFree',false);
+         }
+         createCounter= JSON.parse(localStorage.getItem('createCounter')) || 0;
+         if (createCounter = 0){
+            localStorage.setItem('createCounter',0);
+         }
+         finishedCounter= JSON.parse(localStorage.getItem('createCounter')) || 0;
+         if (finishedCounter = 0){
+            localStorage.setItem('finishedCounter',0);
+         }
+
+         console.log(JSON.parse(localStorage.getItem('badge500')));
         // Create a dummy json to save to localstorage scores
         check = JSON.parse(localStorage.getItem('scores')) || [];
         if (check.length === 0) {
@@ -506,10 +538,49 @@ function UpdateScore() {
 
         console.log(JSON.parse(localStorage.getItem('scores')));
 
-        // Check if the user has reached 500 points
-        const totalPoints = parseInt(localStorage.getItem('points'));
+        
+    }
+
+    function checkPoints(totalPoints){
+        badge500= JSON.parse(localStorage.getItem('badge500'));
+        badgeFin20= JSON.parse(localStorage.getItem('badgeFin20'));
+        badgeFree=JSON.parse(localStorage.getItem('badgeFree'));
         if (totalPoints >= 500) {
+            
+         if (badge500 === false){
             createBadge();
             displayPopup();
+            localStorage.setItem('badge500',true);
+         }
+            
+            
+        } else {
+            if (badge500===true){
+                localStorage.setItem('badge500',false);
+            }
         }
+        finishedCounter= JSON.parse(localStorage.getItem('finishedCounter'));
+        if (finishedCounter>=20){
+            if (badgeFin20===false){
+                //////
+            }
+        }else {
+            if (badgeFin20===true){
+                localStorage.setItem('badgeFin20',false);
+            }
+        }
+        createCounter=JSON.parse(localStorage.getItem('createCounter'));
+        if (createCounter>=20){
+            if (badgeFree===false){
+                //////
+            }
+        }else {
+            if (badgeFree===true){
+                localStorage.setItem('badgeFree',false);
+            }
+        }
+
+
+        
+
     }
