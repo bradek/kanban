@@ -262,6 +262,12 @@ function drop(event) {
     function updatePoints() {
         const doneTasks = document.getElementById('done-tasks').childNodes;
         totalPoints = 15 * doneTasks.length;
+
+        if (totalPoints >= 500) {
+            createBadge(); // Create badge when points reach 500
+            displayPopup(); // Display popup on the index page
+        }
+
         savePoints(); // Save the updated points
         document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
     }
@@ -370,40 +376,41 @@ function drop(event) {
         document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
         UpdateScore();
     }
-    //A simple function that removes points from totalPoints and updates point counter in html
-    function removePoints(points) {
-        totalPoints -= points;
-        if (totalPoints<0){
-            totalPoints=0;
+// A function that removes points from totalPoints and updates point counter in html
+function removePoints(points) {
+    totalPoints -= points;
+    if (totalPoints < 0) {
+        totalPoints = 0;
+    }
+    savePoints(); // Save the updated points
+    document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
+    UpdateScore(); // Call the function after updating the points
+}
+
+
+// A function that creates a JSON file with a name and score that will be saved in localstorage
+function UpdateScore() {
+    const testerName = "Tester";
+    const score = totalPoints;
+    const scoreObject = { testerName, score };
+    const scoreslist = JSON.parse(localStorage.getItem('scores')) || [];
+
+    for (var i = 0; i < scoreslist.length; i++) {
+        if (scoreslist[i].name === testerName) {
+            scoreslist[i].score = totalPoints;
+            console.log("Score updated");
+            break;
         }
-        savePoints(); // Save the updated points
-        document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
-        UpdateScore();
+        console.log("looped");
     }
+    localStorage.setItem('scores', JSON.stringify(scoreslist));
 
-
-    // A function that creates a JSON file with a name and score that will be saved in localstorage
-    function UpdateScore() {
-        const testerName = "Tester";
-        const score = totalPoints;
-        const scoreObject = { testerName, score };
-        const scoreslist = JSON.parse(localStorage.getItem('scores')) || [];
-
-       
-        
-        
-        
-
-        for (var i = 0; i < scoreslist.length; i++) {
-            if (scoreslist[i].name === testerName) {
-              scoreslist[i].score = totalPoints;
-              console.log ("Score updated");
-              break;
-            }
-            console.log ("looped");
-          }
-        localStorage.setItem('scores', JSON.stringify(scoreslist));
+    // Check if the user has reached 500 points after updating the score
+    if (totalPoints >= 500) {
+        createBadge();
+        displayPopup();
     }
+}
 
     // A function that loads the scores from localstorage and displays them in the scoreboard
     function loadScores() {
@@ -422,9 +429,87 @@ function drop(event) {
         }
     }
 
+    function createBadge() {
+        // Create badge image element
+        const badgeImage = document.createElement('img');
+        badgeImage.src = 'img/badge_500points.png'; // Update with your image path
+        badgeImage.alt = '500 Points Badge';
+    
+        // Append the badge to the badges section
+        const badgesSection = document.getElementById('badges-section');
+        badgesSection.appendChild(badgeImage);
+    }
+
+    function displayPopup() {
+        // Create a popup element
+        const popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.textContent = 'Congratulations! You reached 500 points!';
+    
+        // Append the popup to the body
+        document.body.appendChild(popup);
+    
+        // Remove the popup after a certain time (e.g., 5 seconds)
+        setTimeout(() => {
+            popup.remove();
+        }, 5000);
+    }    
+
     // function to clear scores from localstorage
     function clearScores() {
         localStorage.removeItem('scores');
+    }    function createBadge() {
+        // Create badge image element
+        const badgeImage = document.createElement('img');
+        badgeImage.src = 'img/badge_500points.png'; // Update with your image path
+        badgeImage.alt = '500 Points Badge';
+
+        // Append the badge to the badges section
+        const badgesSection = document.getElementById('badges-section');
+        badgesSection.appendChild(badgeImage);
     }
 
-    
+    function displayPopup() {
+        // Create a popup element
+        const popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.textContent = 'Congratulations! You reached 500 points!';
+
+        // Append the popup to the body
+        document.body.appendChild(popup);
+
+        // Remove the popup after a certain time (e.g., 5 seconds)
+        setTimeout(() => {
+            popup.remove();
+        }, 5000);
+    }
+
+    window.onload = function() {
+        loadTasks();
+        // Create a dummy json to save to localstorage scores
+        check = JSON.parse(localStorage.getItem('scores')) || [];
+        if (check.length === 0) {
+            const dummyScores = [
+                { name: 'Bob', score: 0 },
+                { name: 'Alice', score: 5 },
+                { name: 'Tester', score: 0 },
+                { name: 'Bob', score: 20 },
+                { name: 'Tiger', score: 60 },
+                { name: 'Eve', score: 100 },
+                { name: 'Lars', score: 3 },
+                { name: 'Sam', score: 12 },
+                { name: 'Frank', score: 88 },
+                { name: 'Johnny', score: 8 }
+            ];
+            localStorage.setItem('scores', JSON.stringify(dummyScores));
+        }
+
+        console.log(JSON.parse(localStorage.getItem('scores')));
+
+        // Check if the user has reached 500 points
+        const totalPoints = parseInt(localStorage.getItem('points'));
+        if (totalPoints >= 500) {
+            createBadge();
+            displayPopup();
+        }
+    }

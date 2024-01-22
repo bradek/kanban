@@ -246,3 +246,10 @@ I don't want the links to have a standard hyperlink colour, but a more pleasant 
 body.dark-mode .login-register {
     background-color: var(--button-bg-dark);
 }
+
+.badgesnav{
+    /*I want the navigation to take the entire width of the div in which they are.*/
+    width: 100%;
+    /*I want the navigation to be centered.*/
+    text-align: center;
+}
