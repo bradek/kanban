@@ -138,6 +138,7 @@ function drop(event) {
                     //substractPointsToDoInProgress();
                    // substractPointsTodo();
                     removePoints(21);
+                    
                 }
 
                 //If the event target is not anymore in 'inprogress-tasks', 5 points get removed.
@@ -377,6 +378,9 @@ function drop(event) {
         savePoints(); // Save the updated points
         document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
         UpdateScore();
+        localStorage.setItem('finishedCounter',0);
+        localStorage.setItem('createCounter',0);
+
     }
     //A simple function that adds points to totalPoints and updates point counter in html
     function addPoints2(points) {
@@ -447,12 +451,12 @@ function UpdateScore() {
        // badgesSection.appendChild(badgeImage);
     }
 
-    function displayPopup() {
+    function displayPopup(text) {
         console.log("500 gehaald");
         // Create a popup element
         const popup = document.createElement('div');
         popup.className = 'popup';
-        popup.textContent = 'Congratulations! You reached 500 points!';
+        popup.textContent = text;
     
         // Append the popup to the body
         document.body.appendChild(popup);
@@ -461,39 +465,15 @@ function UpdateScore() {
         setTimeout(() => {
             popup.remove();
         }, 5000);
-        console.log("500 gehaald");
+        console.log("500 gehaalddedsadsadass");
     }    
 
     // function to clear scores from localstorage
     function clearScores() {
         localStorage.removeItem('scores');
     }    
-    function createBadge() {
-        // Create badge image element
-        const badgeImage = document.createElement('img');
-        badgeImage.src = 'img/badge_500points.png'; // Update with your image path
-        badgeImage.alt = '500 Points Badge';
-
-        // Append the badge to the badges section
-        const badgesSection = document.getElementById('badges-section');
-        badgesSection.appendChild(badgeImage);
-    }
-
-    function displayPopup() {
-        // Create a popup element
-        const popup = document.createElement('div');
-        popup.className = 'popup';
-        popup.textContent = 'Congratulations! You reached 500 points!';
-
-        // Append the popup to the body
-        document.body.appendChild(popup);
-
-        // Remove the popup after a certain time (e.g., 5 seconds)
-        setTimeout(() => {
-            popup.remove();
-        }, 5000);
-    }
-
+    
+    
     window.onload = function() {
         loadTasks();
          badge500= JSON.parse(localStorage.getItem('badge500')) || false;
@@ -548,8 +528,8 @@ function UpdateScore() {
         if (totalPoints >= 500) {
             
          if (badge500 === false){
-            createBadge();
-            displayPopup();
+            
+            displayPopup("Congratulations! You reached 500 points!");
             localStorage.setItem('badge500',true);
          }
             
@@ -562,7 +542,8 @@ function UpdateScore() {
         finishedCounter= JSON.parse(localStorage.getItem('finishedCounter'));
         if (finishedCounter>=20){
             if (badgeFin20===false){
-                //////
+             displayPopup("Congratulations! You finished 20 tasks!");
+             localStorage.setItem('badgeFin20',true);
             }
         }else {
             if (badgeFin20===true){
@@ -572,7 +553,8 @@ function UpdateScore() {
         createCounter=JSON.parse(localStorage.getItem('createCounter'));
         if (createCounter>=20){
             if (badgeFree===false){
-                //////
+                displayPopup("Congratulations! You started 20 tasks!");
+                localStorage.setItem('badgeFree',true);
             }
         }else {
             if (badgeFree===true){
