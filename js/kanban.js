@@ -70,15 +70,16 @@ function drop(event) {
         else if (originalParentId === 'todo-tasks' && targetId === 'done-tasks') {
             addPoints2(20);
             finishedCounter= JSON.parse(localStorage.getItem('finishedCounter'));
-            finishedCounter++;
+            finishedCounter=finishedCounter+1;
             localStorage.setItem('finishedCounter',finishedCounter);
         } 
         
         else if (originalParentId === 'inprogress-tasks' && targetId === 'done-tasks') {
-            addPoints2(15);
+            
             finishedCounter= JSON.parse(localStorage.getItem('finishedCounter'));
-            finishedCounter++;
+            finishedCounter=finishedCounter+1;
             localStorage.setItem('finishedCounter',finishedCounter);
+            addPoints2(15);
         }
         else if (originalParentId === 'inprogress-tasks' && targetId === 'todo-tasks') {
             removePoints(5);
@@ -118,6 +119,7 @@ function drop(event) {
         createCounter=JSON.parse(localStorage.getItem('createCounter'));
         createCounter++;
         localStorage.setItem('createCounter',createCounter);
+        checkPoints();
     }
 
     //A method to remove a task.
@@ -141,6 +143,7 @@ function drop(event) {
                     finishedCounter= JSON.parse(localStorage.getItem('finishedCounter'));
                     finishedCounter--;
                     localStorage.setItem('finishedCounter',finishedCounter);
+                    checkPoints();
                 }
 
                 //If the event target is not anymore in 'inprogress-tasks', 5 points get removed.
@@ -159,6 +162,7 @@ function drop(event) {
                 createCounter--;
                 localStorage.setItem('createCounter',createCounter);
                 draggableTask.remove();
+                checkPoints();
             }
 
             //The saveTasks() method is being called.
@@ -392,7 +396,7 @@ function drop(event) {
         savePoints(); // Save the updated points
         document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
         UpdateScore();
-        checkPoints(totalPoints);
+        checkPoints();
     }
 // A function that removes points from totalPoints and updates point counter in html
 function removePoints(points) {
@@ -403,7 +407,7 @@ function removePoints(points) {
     savePoints(); // Save the updated points
     document.getElementById('point-counter').textContent = `Points: ${totalPoints}`;
     UpdateScore(); // Call the function after updating the points
-    checkPoints(totalPoints);
+    checkPoints();
 }
 
 
@@ -456,7 +460,7 @@ function UpdateScore() {
     }
 
     function displayPopup(text) {
-        console.log("500 gehaald");
+        
         // Create a popup element
         const popup = document.createElement('div');
         popup.className = 'popup';
@@ -469,7 +473,7 @@ function UpdateScore() {
         setTimeout(() => {
             popup.remove();
         }, 5000);
-        console.log("500 gehaalddedsadsadass");
+        
     }    
 
     // function to clear scores from localstorage
@@ -500,7 +504,7 @@ function UpdateScore() {
          if (finishedCounter = 0){
             localStorage.setItem('finishedCounter',0);
          }
-
+         console.log (JSON.parse(localStorage.getItem('createCounter')));
          console.log(JSON.parse(localStorage.getItem('badge500')));
         // Create a dummy json to save to localstorage scores
         check = JSON.parse(localStorage.getItem('scores')) || [];
@@ -525,11 +529,12 @@ function UpdateScore() {
         
     }
 
-    function checkPoints(totalPoints){
+    function checkPoints(){
         badge500= JSON.parse(localStorage.getItem('badge500'));
         badgeFin20= JSON.parse(localStorage.getItem('badgeFin20'));
         badgeFree=JSON.parse(localStorage.getItem('badgeFree'));
-        if (totalPoints >= 500) {
+         localpoints= JSON.parse(localStorage.getItem('points'));
+        if (localpoints >= 100) {
             
          if (badge500 === false){
             
