@@ -398,6 +398,7 @@ function drop(event) {
         UpdateScore();
         localStorage.setItem('finishedCounter',0);
         localStorage.setItem('createCounter',0);
+        checkPoints();
 
     }
     //A simple function that adds points to totalPoints and updates point counter in html
