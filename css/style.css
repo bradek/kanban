@@ -253,3 +253,6 @@ body.dark-mode .login-register {
     /*I want the navigation to be centered.*/
     text-align: center;
 }
+.badges-section img{
+    width: 25%;
+}
