@@ -138,7 +138,9 @@ function drop(event) {
                     //substractPointsToDoInProgress();
                    // substractPointsTodo();
                     removePoints(21);
-                    
+                    finishedCounter= JSON.parse(localStorage.getItem('finishedCounter'));
+                    finishedCounter--;
+                    localStorage.setItem('finishedCounter',finishedCounter);
                 }
 
                 //If the event target is not anymore in 'inprogress-tasks', 5 points get removed.
@@ -153,7 +155,9 @@ function drop(event) {
                     //substractPointsTodo(); // Subtract points if the removed task was from 'To do'
                     removePoints(1);
                 }
-
+                createCounter=JSON.parse(localStorage.getItem('createCounter'));
+                createCounter--;
+                localStorage.setItem('createCounter',createCounter);
                 draggableTask.remove();
             }
 
