@@ -72,6 +72,7 @@ function drop(event) {
             finishedCounter= JSON.parse(localStorage.getItem('finishedCounter'));
             finishedCounter=finishedCounter+1;
             localStorage.setItem('finishedCounter',finishedCounter);
+            checkPoints();
         } 
         
         else if (originalParentId === 'inprogress-tasks' && targetId === 'done-tasks') {
@@ -80,18 +81,27 @@ function drop(event) {
             finishedCounter=finishedCounter+1;
             localStorage.setItem('finishedCounter',finishedCounter);
             addPoints2(15);
+            checkPoints();
         }
         else if (originalParentId === 'inprogress-tasks' && targetId === 'todo-tasks') {
             removePoints(5);
         }
         //If the event target id is 'inprogress-tasks', then the updatePointsToDoInProgress() method is being called.
         else if (originalParentId === 'done-tasks' && targetId === 'inprogress-tasks') {
+            finishedCounter= JSON.parse(localStorage.getItem('finishedCounter'));
+            finishedCounter=finishedCounter-1;
+            localStorage.setItem('finishedCounter',finishedCounter);
             removePoints(15);
+            checkPoints();
         } 
         
         // Check if the task is moved from 'in-progress' to 'done'
         else if (originalParentId === 'done-tasks' && targetId === 'todo-tasks') {
+            finishedCounter= JSON.parse(localStorage.getItem('finishedCounter'));
+            finishedCounter=finishedCounter-1;
+            localStorage.setItem('finishedCounter',finishedCounter);
             removePoints(20);
+            checkPoints();
         }
 
          saveTasks();
@@ -505,6 +515,7 @@ function UpdateScore() {
             localStorage.setItem('finishedCounter',0);
          }
          console.log (JSON.parse(localStorage.getItem('createCounter')));
+            console.log (JSON.parse(localStorage.getItem('finishedCounter')));
          console.log(JSON.parse(localStorage.getItem('badge500')));
         // Create a dummy json to save to localstorage scores
         check = JSON.parse(localStorage.getItem('scores')) || [];
